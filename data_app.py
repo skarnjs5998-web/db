@@ -38,16 +38,17 @@ if table_names:
 st.header("💻 사용자 정의 SQL 쿼리")
 st.warning("경고: 읽기 전용 모드이므로 데이터는 변경되지 않습니다. SELECT 쿼리만 사용하세요.")
 
-# 기본 쿼리 예시 (Book과 Orders 테이블을 조인하여 가격이 10000원 이상인 항목 조회)
+# 🌟🌟🌟 수정된 기본 쿼리 (bookid 및 custid 반영) 🌟🌟🌟
 default_query = """
-SELECT 
-    B.b_name AS "도서명", 
-    B.b_publisher AS "출판사", 
-    O.o_price AS "주문가격"
+-- Q: 가장 많은 책을 주문한 고객의 이름과 주문 총액을 조회
+SELECT
+    C.c_name AS "고객 이름",
+    SUM(O.o_price) AS "총 주문 금액",
+    COUNT(O.custid) AS "총 주문 횟수"
 FROM Orders O
-JOIN Book B ON O.bookid = B.b_id
-WHERE O.o_price >= 10000
-ORDER BY "주문가격" DESC;
+JOIN Customer C ON O.custid = C.c_id  -- Orders.custid와 Customer.c_id 연결
+GROUP BY 1
+ORDER BY "총 주문 금액" DESC;
 """
 
 user_query = st.text_area("SQL 쿼리를 입력하세요:", value=default_query, height=200)
@@ -60,11 +61,10 @@ if st.button("쿼리 실행"):
         st.success("쿼리 실행 완료!")
         st.dataframe(query_result)
 
-        # 간단한 시각화 (Pandas DataFrame을 지원)
-        if not query_result.empty:
-            if '주문가격' in query_result.columns:  # 예시 쿼리의 결과 컬럼인 경우 차트 표시
-                st.subheader("📊 시각화 (주문가격 기준)")
-                st.bar_chart(query_result, x="도서명", y="주문가격")
+        # 간단한 시각화 (총 주문 금액 컬럼이 있다면 차트 표시)
+        if not query_result.empty and "총 주문 금액" in query_result.columns:
+            st.subheader("📊 시각화 (총 주문 금액 기준)")
+            st.bar_chart(query_result, x="고객 이름", y="총 주문 금액")
 
     except Exception as e:
         st.error(f"쿼리 실행 중 오류가 발생했습니다: {e}")
