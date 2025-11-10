@@ -40,15 +40,7 @@ st.warning("경고: 읽기 전용 모드이므로 데이터는 변경되지 않�
 
 # 🌟🌟🌟 수정된 기본 쿼리 (bookid 및 custid 반영) 🌟🌟🌟
 default_query = """
--- Q: 가장 많은 책을 주문한 고객의 이름과 주문 총액을 조회
-SELECT
-    C.c_name AS "고객 이름",
-    SUM(O.o_price) AS "총 주문 금액",
-    COUNT(O.custid) AS "총 주문 횟수"
-FROM Orders O
-JOIN Customer C ON O.custid = C.c_id  -- Orders.custid와 Customer.c_id 연결
-GROUP BY 1
-ORDER BY "총 주문 금액" DESC;
+-- 질문하세요.
 """
 
 user_query = st.text_area("SQL 쿼리를 입력하세요:", value=default_query, height=200)
