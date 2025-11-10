@@ -45,7 +45,7 @@ SELECT
     B.b_publisher AS "출판사", 
     O.o_price AS "주문가격"
 FROM Orders O
-JOIN Book B ON O.bookid = B.b_id  -- ✅ 'O.b_id'를 'O.bookid'로 수정
+JOIN Book B ON O.bookid = B.b_id
 WHERE O.o_price >= 10000
 ORDER BY "주문가격" DESC;
 """
