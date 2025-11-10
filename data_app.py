@@ -45,7 +45,7 @@ SELECT
     B.b_publisher AS "출판사", 
     O.o_price AS "주문가격"
 FROM Orders O
-JOIN Book B ON O.b_id = B.b_id
+JOIN Book B ON O.bookid = B.b_id  --
 WHERE O.o_price >= 10000
 ORDER BY "주문가격" DESC;
 """
@@ -67,4 +67,5 @@ if st.button("쿼리 실행"):
                 st.bar_chart(query_result, x="도서명", y="주문가격")
 
     except Exception as e:
+
         st.error(f"쿼리 실행 중 오류가 발생했습니다: {e}")
